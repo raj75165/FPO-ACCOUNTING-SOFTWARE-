@@ -17,6 +17,7 @@ import {
   formatCurrency,
   calculateTotals,
   generateReportText,
+  generateReportFileName,
   getMonthName,
   filterTransactionsByMonth,
   groupByCategory,
@@ -95,9 +96,11 @@ export default function ReportsScreen({ navigation }) {
           : null
       );
 
-      const fileName = `FPO_Report_${fpoInfo.name?.replace(/\s+/g, '_') || 'Report'}_${
-        selectedMonth !== 0 ? MONTHS[selectedMonth] + '_' : ''
-      }${currentYear}.txt`;
+      const fileName = generateReportFileName(
+        fpoInfo.name,
+        selectedMonth !== 0 ? MONTHS[selectedMonth] : null,
+        currentYear
+      );
 
       const fileUri = FileSystem.documentDirectory + fileName;
       await FileSystem.writeAsStringAsync(fileUri, reportText, {

@@ -7,7 +7,12 @@ const KEYS = {
   FPO_INFO: '@fpo_info',
 };
 
-// Generic get
+/**
+ * Generate a unique ID combining timestamp and random component
+ */
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
 async function getItem(key) {
   try {
     const value = await AsyncStorage.getItem(key);
@@ -42,7 +47,7 @@ export async function addMember(member) {
   const members = await getMembers();
   const newMember = {
     ...member,
-    id: Date.now().toString(),
+    id: generateId(),
     createdAt: new Date().toISOString(),
   };
   members.push(newMember);
@@ -80,7 +85,7 @@ export async function addTransaction(transaction) {
   const transactions = await getTransactions();
   const newTransaction = {
     ...transaction,
-    id: Date.now().toString(),
+    id: generateId(),
     createdAt: new Date().toISOString(),
   };
   transactions.push(newTransaction);
@@ -118,7 +123,7 @@ export async function addMeeting(meeting) {
   const meetings = await getMeetings();
   const newMeeting = {
     ...meeting,
-    id: Date.now().toString(),
+    id: generateId(),
     createdAt: new Date().toISOString(),
   };
   meetings.push(newMeeting);

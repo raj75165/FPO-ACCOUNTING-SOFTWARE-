@@ -13,7 +13,7 @@ import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
 import { useAppData } from '../context/AppDataContext';
 import { COLORS, SIZES } from '../utils/theme';
-import { formatDateTime } from '../utils/helpers';
+import { formatDateTime, generateBackupFileName } from '../utils/helpers';
 
 function ActionCard({ emoji, title, description, buttonLabel, onPress, buttonColor, loading }) {
   return (
@@ -33,7 +33,7 @@ function ActionCard({ emoji, title, description, buttonLabel, onPress, buttonCol
 }
 
 export default function BackupScreen() {
-  const { exportData, importData, members, transactions, meetings } = useAppData();
+  const { exportData, importData, members, transactions, meetings, fpoInfo } = useAppData();
   const [backingUp, setBackingUp] = useState(false);
   const [restoring, setRestoring] = useState(false);
   const [lastBackup, setLastBackup] = useState(null);
@@ -43,7 +43,7 @@ export default function BackupScreen() {
     try {
       const data = await exportData();
       const json = JSON.stringify(data, null, 2);
-      const fileName = `FPO_Backup_${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.json`;
+      const fileName = generateBackupFileName(data.fpoInfo?.name);
       const fileUri = FileSystem.documentDirectory + fileName;
 
       await FileSystem.writeAsStringAsync(fileUri, json, {

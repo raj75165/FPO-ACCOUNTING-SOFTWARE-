@@ -168,6 +168,24 @@ export function groupByCategory(transactions) {
   }, {});
 }
 
+/**
+ * Generate a backup filename for the given FPO name and optional month
+ */
+export function generateBackupFileName(fpoName) {
+  const safeName = (fpoName || 'FPO').replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  return `FPO_Backup_${safeName}_${timestamp}.json`;
+}
+
+/**
+ * Generate a report filename for the given FPO name and period
+ */
+export function generateReportFileName(fpoName, monthLabel, year) {
+  const safeName = (fpoName || 'FPO').replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+  const period = monthLabel ? `${monthLabel}_${year}` : `${year}`;
+  return `FPO_Report_${safeName}_${period}.txt`;
+}
+
 export const TRANSACTION_CATEGORIES = {
   income: [
     'Sales', 'Member Contribution', 'Grant/Subsidy', 'Loan',
